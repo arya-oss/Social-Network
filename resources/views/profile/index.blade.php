@@ -8,6 +8,16 @@
 			
 		</div>
 		<div class="col-md-4 col-md-offset-3">
+			@if (Auth::user()->hasFriendRequestPending($user))
+				<p>Waiting for <a href="#"> {{ $user->getNameOrUsername() }}</a> to accept your request.</p>
+			@elseif (Auth::user()->hasFriendRequestRecieved($user))
+				<a href="" class="btn btn-primary">Accept Friend Request</a>
+			@elseif (Auth::user()->isFriendsWith($user))
+				<p>You and {{ $user->getNameOrUsername() }} are friends.</p>
+			@else
+				<a href="#" class="btn btn-primary">Add Friend</a>
+			@endif
+			
 			<h4>{{ $user->getFirstNameOrUsername() }}'s friends.</h4>
 			@if (!$user->friends()->count())
 				<p>{{ $user->getFirstNameOrUsername() }} has no friends.</p>

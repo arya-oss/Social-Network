@@ -55,10 +55,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 	public function friends(){
 		return $this->friendsOfMine()->wherePivot('accepted', true)->get()
-				->merge($this->friendOf()->where('accepted', TRUE)->get());
+				->merge($this->friendOf()->wherePivot('accepted', TRUE)->get());
 	}
 	public function friendRequests(){
 		return $this->friendsOfMine()->wherePivot('accepted', false)->get();
+	}
+	public function friendRequestsPending() {
+		return $this->friendOf()->wherePivot('accepted', false)->get();
+	}
+	public function hasFriendRequestPending(User $user) {
+		return (bool) $this->friendRequestsPending()->where('id', $user->id)->count();
+	}
+	public function hasFriendRequestRecieved(User $user){
+		return (bool) $this->friendRequests()->where('id', $user->id)->count();
+	}
+	public function addFriend(User $user){
+		$this->friendOf()->attach($user->id);
+	}
+	public function acceptFriendRequest(User $user) {
+		$this->friendRequests()->where('id', $user->id)->first()->pivot
+		->update([
+			'accepted'=>true,
+		]);
+	}
+	public function isFriendsWith(User $user) {
+		return (bool) $this->friends()->where('id',$user->user_id)->count();
 	}
 }
 ?>
