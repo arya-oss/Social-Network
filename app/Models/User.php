@@ -47,6 +47,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function getAvatarUrl(){
 		return "https://www.gravatar.com/avatar/{{ md5($this->email) }}?d=mm&s=40";
 	}
+
+	public function statuses() {
+		return $this->hasMany('App\Models\Status', 'user_id');
+	}
+
 	public function friendsOfMine(){
 		return $this->belongsToMany('App\Models\User', 'friends', 'user_id', 'friend_id');
 	}
@@ -55,7 +60,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 	public function friends(){
 		return $this->friendsOfMine()->wherePivot('accepted', true)->get()
-				->merge($this->friendOf()->wherePivot('accepted', TRUE)->get());
+				->merge($this->friendOf()->wherePivot('accepted', true)->get());
 	}
 	public function friendRequests(){
 		return $this->friendsOfMine()->wherePivot('accepted', false)->get();
@@ -79,7 +84,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		]);
 	}
 	public function isFriendsWith(User $user) {
-		return (bool) $this->friends()->where('id',$user->user_id)->count();
+		
+		return (bool) $this->friends()->where('id',$user->id)->count();
 	}
 }
 ?>
