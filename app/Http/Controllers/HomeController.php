@@ -12,8 +12,8 @@ class HomeController extends Controller {
 					->orWhereIn('user_id', Auth::user()->friends()->lists('id'));
 			})->orderBy('created_at', 'desc')
 			  ->paginate(5);
-			return view('timeline.index')
-				->with('statuses', $statuses);
+			return view('timeline.index')->with('statuses', $statuses);
+			//dd($statuses);
 		}
 		return view('home');
 	}
