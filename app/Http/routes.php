@@ -89,4 +89,9 @@ Route::post('/status/{statusId}/reply', [
 	'as'	=> 'status.reply',
 	'middleware' => ['auth']
 ]);
+Route::get('/status/{statusId}/like', [
+	'uses'  => '\App\Http\Controllers\StatusController@getLike',
+	'as'	=> 'status.like',
+	'middleware' => ['auth']
+]);
 });

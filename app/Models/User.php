@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Models\Status;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -52,6 +53,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->hasMany('App\Models\Status', 'user_id');
 	}
 
+	public function likes(){
+		return $this->hasMany('App\Models\Like', 'user_id');
+	}
+
 	public function friendsOfMine(){
 		return $this->belongsToMany('App\Models\User', 'friends', 'user_id', 'friend_id');
 	}
@@ -86,6 +91,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function isFriendsWith(User $user) {
 		
 		return (bool) $this->friends()->where('id',$user->id)->count();
+	}
+
+	public function hasLikedStatus(Status $status) {
+		return (bool) $status->likes
+			->where('likeable_id', $status->id)
+			->where('likeable_type', get_class($status))
+			->where('user_id', $this->id)
+			->count();
 	}
 }
 ?>
