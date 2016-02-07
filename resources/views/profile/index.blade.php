@@ -69,6 +69,10 @@
 				<a href="{{ route('friends.accept',['username'=>$user->username]) }}" class="btn btn-primary">Accept Friend Request</a>
 			@elseif (Auth::user()->isFriendsWith($user))
 				<p>You and {{ $user->getNameOrUsername() }} are friends.</p>
+				<form action="{{ route('friends.delete', ['username'=>$user->username,]) }}" method="post">
+					{!! csrf_field() !!}
+					<input type="submit" value="Delete Friend" class="btn btn-primary">
+				</form>
 			@elseif (Auth::user()->id !== $user->id)
 				{{ Auth::user()->id }} {{$user->id}}	
 				<a href="{{ route('friends.add',['username'=>$user->username]) }}" class="btn btn-primary">Add Friend</a>
