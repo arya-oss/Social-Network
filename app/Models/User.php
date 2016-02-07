@@ -94,10 +94,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	public function hasLikedStatus(Status $status) {
-		return (bool) $status->likes
+		return (bool) $this->likes()
 			->where('likeable_id', $status->id)
 			->where('likeable_type', get_class($status))
-			->where('user_id', $this->id)
+			// ->where('user_id', $this->id)
 			->count();
 	}
 }

@@ -52,8 +52,11 @@ class StatusController extends Controller {
 		}
 
 		if(Auth::user()->hasLikedStatus($status)){
+			// dd('has already liked status.');
 			return redirect()->back();
 		}
+		
+		//dd(Auth::user()->hasLikedStatus($status));
 		$like = $status->likes()->create([]);
 		Auth::user()->likes()->save($like);
 		return redirect()->back();
