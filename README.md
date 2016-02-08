@@ -13,6 +13,10 @@ This code is written from free Lecture provided by [CodeCourse](https://www.yout
 ```
 	composer install
 ```
+* Migrate the database
+```
+	php artisan migrate
+```
 * Configuration
  <ol>
  	<li> Apache Httpd Server 2.4.7 with mod_rewrite extension </li>
